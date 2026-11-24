@@ -422,7 +422,7 @@ S.projects = (v, arg) => {
 
 // ---------------------------------------------------------------- 語音教學（預錄的臺灣華語自然語音）
 const audio = new Audio();
-function stopVoice() { audio.pause(); clearInterval(audio._t); if (window.speechSynthesis) speechSynthesis.cancel(); }
+function stopVoice() { audio.pause(); clearInterval(audio._t); if (window.speechSynthesis) speechSynthesis.cancel(); if (AND && AND.ttsStop) AND.ttsStop(); }
 function play(src, onTick) {
   stopVoice(); audio.src = src; audio.play().catch(() => toast("無法播放語音（請先點一下畫面）", true));
   if (onTick) audio._t = setInterval(() => { if (audio.duration) onTick(audio.currentTime / audio.duration); if (audio.ended) clearInterval(audio._t); }, 200);
