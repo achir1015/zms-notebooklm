@@ -1,5 +1,5 @@
 // 離線快取：改了程式要遞增 CACHE，使用者才會拿到新版
-const CACHE = "zms-notebooklm-v1";
+const CACHE = "zms-notebooklm-v2";
 const CORE = ["./", "index.html", "icon.png", "manifest.webmanifest", "app/", "app/index.html", "app/style.css", "app/app.js",
   "app/data.js", "app/engine.js", "app/deck.js", "app/render.js", "app/webpage.tpl.html", "app/icon.png",
   "app/lib/jszip.min.js", "app/lib/pptxgen.bundle.js"];
