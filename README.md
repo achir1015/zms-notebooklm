@@ -1,6 +1,13 @@
 # 資料助秘NotebookLM MCP簡報
+<img width="560" height="349" alt="image" src="https://github.com/user-attachments/assets/21ff7c45-0f29-4ac6-b65d-8748a3134abd" />
+<img width="1907" height="965" alt="image" src="https://github.com/user-attachments/assets/b2ce007e-e597-4a3d-893f-b120a2c0dd6c" />
 
 <img src="assets/icon.png" width="120" align="right">
+說明
+
+
+https://github.com/user-attachments/assets/b15770d6-6d81-4f42-b89a-bc7418b1796d
+
 
 選一本 Google NotebookLM（Gemini Notebook）筆記本，就在這個工具裡依照筆記本的來源產生 **簡報、心智圖、報告、測驗、資訊圖表、互動式網頁**，不必到 NotebookLM 官方網頁裡製作。
 
