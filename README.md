@@ -39,7 +39,7 @@ https://github.com/user-attachments/assets/b15770d6-6d81-4f42-b89a-bc7418b1796d
 - [x] macOS（Apple 公證 DMG）
 - [x] 線上版（HTML）：https://achir1015.github.io/zms-notebooklm/ （NotebookLM 用「複製指令 → 貼上 → 貼回回答」三步；內建範本離線可用）
 - [x] iPhone／iPad：用 Safari 開 https://achir1015.github.io/zms-notebooklm/ios/ 線上安裝（Ad Hoc，限登記過的裝置）
-- [ ] Android
+- [x] Android：Release 下載 ZMSNotebookLM-1.0.0-android.apk
 
 ## 使用方式
 
