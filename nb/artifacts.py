@@ -567,9 +567,16 @@ def _template_slides(brief, t):
     return S
 
 
+def _shuffle(a, seed):
+    """可重現的洗牌（線上版 JavaScript 用同一個演算法，兩邊結果一樣）。"""
+    for i in range(len(a) - 1, 0, -1):
+        seed[0] = (seed[0] * 1103515245 + 12345) % 2147483648
+        j = seed[0] % (i + 1)
+        a[i], a[j] = a[j], a[i]
+
+
 def _template_quiz(t, n):
-    import random
-    rnd = random.Random(hash(t["name"]) & 0xFFFF)
+    seed = [sum(ord(ch) for ch in t["name"]) or 1]
     qs = []
     # 常見錯誤 → 單選題（正確做法 vs 其他錯誤做法）
     errs = [e for e in t["errors"] if len(e) == 2]
@@ -578,7 +585,7 @@ def _template_quiz(t, n):
         while len(wrong) < 3:
             wrong.append(["不必在意，照平常習慣做", "等下班再處理", "請家屬自己處理"][len(wrong)])
         opts = [r] + wrong
-        rnd.shuffle(opts)
+        _shuffle(opts, seed)
         qs.append(dict(type="single", q="關於「%s」，正確的做法是？" % w, options=opts, answer="ABCD"[opts.index(r)],
                        explain="正確做法：%s。" % r))
     for c in t["cautions"]:

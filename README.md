@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/b15770d6-6d81-4f42-b89a-bc7418b1796d
 
 - [x] Windows 11
 - [x] macOS（Apple 公證 DMG）
-- [ ] 線上版（HTML）
+- [x] 線上版（HTML）：https://achir1015.github.io/zms-notebooklm/ （NotebookLM 用「複製指令 → 貼上 → 貼回回答」三步；內建範本離線可用）
 - [ ] iPhone／iPad（線上安裝）
 - [ ] Android
 

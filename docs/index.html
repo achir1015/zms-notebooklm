@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>資料助秘NotebookLM MCP簡報</title>
+<meta name="description" content="選一本 Google NotebookLM 筆記本，產生簡報、心智圖、報告、測驗、資訊圖表與互動式網頁。">
+<meta name="theme-color" content="#0F2747">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root { --p:#1E4D8C; --a:#0FA294; --g:#E0A526; --t:#1F2937; --m:#6B7280; --l:#E5E9F0; }
+* { box-sizing:border-box; } body { margin:0; font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif; color:var(--t); background:#F2F5FA; }
+.hero { background:linear-gradient(135deg,#0F2747,#1E4D8C 55%,#0FA294); color:#fff; padding:48px 20px; }
+.wrap { max-width:1060px; margin:0 auto; } .hero .wrap { display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
+.hero img { width:150px; height:150px; } h1 { margin:0 0 8px; font-size:32px; } .hero p { color:#DCE6F5; font-size:17px; line-height:1.6; margin:0 0 18px; }
+.btn { display:inline-block; border-radius:12px; padding:12px 22px; font-weight:700; text-decoration:none; margin:0 8px 8px 0; }
+.b1 { background:var(--g); color:#14325C; } .b2 { background:#fff2; color:#fff; border:1px solid #fff6; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:26px 0; }
+.card { background:#fff; border:1px solid var(--l); border-radius:16px; padding:18px; } .card b { display:block; font-size:16px; margin:6px 0; } .card span { color:var(--m); font-size:14px; line-height:1.6; }
+.ic { font-size:30px; } h2 { margin:30px 0 10px; } table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; }
+td,th { padding:10px 12px; border-bottom:1px solid var(--l); text-align:left; font-size:14px; } th { background:#F7F9FC; }
+footer { color:var(--m); font-size:13px; text-align:center; padding:30px 10px; } ol li { margin:6px 0; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap"><img src="icon.png" alt="資料助秘NotebookLM MCP簡報圖示"><div style="flex:1;min-width:260px">
+  <h1>資料助秘NotebookLM MCP簡報</h1>
+  <p>選一本 Google NotebookLM（Gemini Notebook）筆記本，在這裡產生<b>簡報、心智圖、報告、測驗、資訊圖表、互動式網頁</b>。<br>內容以你的來源為依據，不必到 NotebookLM 官方網頁裡製作。</p>
+  <a class="btn b1" href="app/">開始使用線上版</a><a class="btn b2" href="https://github.com/achir1015/zms-notebooklm/releases/latest">下載電腦版（Windows／macOS）</a>
+  <div><button class="btn b2" id="intro" style="cursor:pointer;font:inherit;font-weight:700">🔊 聽語音介紹</button><a class="btn b2" href="app/#help">語音動態教學</a></div>
+</div></div></div>
+<div class="wrap" style="padding:0 16px">
+  <div class="grid">
+    <div class="card"><div class="ic">🖥️</div><b>簡報</b><span>封面固定格式（標題 45pt／次標題 40pt／小標題 32pt）、10 張以上、Q&A；柔和插畫風格配 3D 小圖示，下載 PowerPoint（文字可編輯）與 Word。</span></div>
+    <div class="card"><div class="ic">🧠</div><b>心智圖</b><span>中心主題左右展開，下載圖片、網頁、Markdown 與 XMind 可匯入的 .mm 檔。</span></div>
+    <div class="card"><div class="ic">📄</div><b>報告與測驗</b><span>Word 報告；測驗有作答卷、解答與會自動計分的線上作答網頁。</span></div>
+    <div class="card"><div class="ic">📊</div><b>資訊圖表</b><span>一頁式直式海報：關鍵數字、重點區塊、一句提醒。</span></div>
+    <div class="card"><div class="ic">🌐</div><b>互動式網頁</b><span>章節展開、關鍵詞翻牌卡、常見問答、計分小測驗，一個檔案就能傳給學員。</span></div>
+    <div class="card"><div class="ic">📁</div><b>專案範本</b><span>內定「病房助理技術教育外傭實務訓練」，複製後改機構、封面與主題庫，就能做其他專案。</span></div>
+  </div>
+  <h2>線上版怎麼用 NotebookLM？</h2>
+  <div class="card"><ol><li>在「產生工具」選產出類型、主題、人員與設定，按「複製指令」。</li><li>按「開啟筆記本」，在 NotebookLM 對話框貼上、送出，等它回答完。</li>
+    <li>把整段回答複製貼回第 6 步，按「產生」——就會排成簡報、心智圖等成品。</li></ol>
+    <span>也可以選「內建範本」離線產生；或在第 7 步複製視覺指令，貼到 NotebookLM 的 Studio 讓它畫 AI 插圖版。</span></div>
+  <h2>線上版與電腦版</h2>
+  <table><tr><th>功能</th><th>線上版</th><th>電腦版（Windows／macOS）</th></tr>
+    <tr><td>六種產出、柔和插畫簡報、PowerPoint／Word／圖片／網頁下載</td><td>✔</td><td>✔</td></tr>
+    <tr><td>向 NotebookLM 提問</td><td>複製貼上三步</td><td>自動（內附 NotebookLM MCP 伺服器）</td></tr>
+    <tr><td>讀取 Google 帳號裡的筆記本清單、加入來源</td><td>—</td><td>✔</td></tr>
+    <tr><td>專案範本、主題庫</td><td>✔（存在這台裝置）</td><td>✔</td></tr>
+    <tr><td>年度主題表、人員名單、使用者權限、備份還原</td><td>—</td><td>內建 MariaDB</td></tr></table>
+</div>
+<footer>v<span id="v"></span> · 系統開發：吳玉柱 先生 與 Claude AI Opus 5.5 · <a href="https://github.com/achir1015/zms-notebooklm">GitHub</a>（MIT）· 3D 圖示：Microsoft Fluent Emoji（MIT）</footer>
+<script type="module">
+import { DATA } from "./app/data.js";
+document.getElementById("v").textContent = DATA.version;
+const a = new Audio("voice/intro.mp3");
+document.getElementById("intro").onclick = () => a.paused ? a.play() : a.pause();
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>

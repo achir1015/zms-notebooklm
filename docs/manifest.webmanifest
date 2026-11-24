@@ -1,0 +1,11 @@
+{
+  "name": "資料助秘NotebookLM MCP簡報",
+  "short_name": "NotebookLM簡報",
+  "start_url": "app/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0F2747",
+  "theme_color": "#0F2747",
+  "lang": "zh-Hant-TW",
+  "icons": [{ "src": "icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }]
+}
