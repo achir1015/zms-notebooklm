@@ -41,7 +41,8 @@ def normalize_url(url):
 
 
 def server_script():
-    for base in (resource_dir(), program_dir()):
+    # Windows 安裝版在程式旁；macOS .app 在 Contents/Resources；開發時在專案的 vendor/
+    for base in (resource_dir(), program_dir(), os.path.normpath(os.path.join(program_dir(), "..", "Resources"))):
         p = os.path.join(base, "vendor", "notebooklm-mcp", "dist", "index.js")
         if os.path.isfile(p):
             return p
