@@ -1,0 +1,144 @@
+"""資料表定義（唯一來源）：建表 SQL 與欄位中文說明。
+
+表名前綴：sys_＝系統（使用者、權限、設定、紀錄）、nb_＝NotebookLM 簡報（筆記本、專案範本、主題庫、人員、年度主題表、成品）。
+tools/gen_schema_doc.py 會依這裡產生 docs/資料表欄位明細.md。
+"""
+
+# (表名, 中文名稱, [(欄位, SQL 型別與屬性, 中文說明)], 其他限制)
+TABLES = [
+    ("sys_meta", "系統參數", [
+        ("k", "VARCHAR(40) NOT NULL PRIMARY KEY", "參數代號"),
+        ("v", "TEXT", "參數值")], []),
+    ("sys_company", "單位設定（單一公司）", [
+        ("id", "INT NOT NULL PRIMARY KEY", "固定 1"),
+        ("name", "VARCHAR(120) NOT NULL DEFAULT ''", "公司、學校或工作室名稱"),
+        ("default_project", "INT NULL", "預設專案"),
+        ("export_dir", "VARCHAR(255) NOT NULL DEFAULT ''", "匯出資料夾（空白＝文件／NotebookLM MCP簡報）")], []),
+    ("sys_user", "使用者", [
+        ("uid", "VARCHAR(30) NOT NULL PRIMARY KEY", "帳號"),
+        ("name", "VARCHAR(60) NOT NULL", "姓名"),
+        ("pw_hash", "VARCHAR(200) NOT NULL", "密碼雜湊（PBKDF2）"),
+        ("role", "VARCHAR(30) NOT NULL DEFAULT ''", "角色範本"),
+        ("dept", "VARCHAR(30) NOT NULL DEFAULT ''", "班別或部門"),
+        ("is_admin", "TINYINT NOT NULL DEFAULT 0", "系統管理員"),
+        ("active", "TINYINT NOT NULL DEFAULT 1", "啟用"),
+        ("last_login", "DATETIME NULL", "最近登入"),
+        ("created_at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", "建立時間")], []),
+    ("sys_user_perm", "使用者權限", [
+        ("uid", "VARCHAR(30) NOT NULL", "帳號"),
+        ("func", "VARCHAR(10) NOT NULL", "功能代號"),
+        ("lvl", "TINYINT NOT NULL DEFAULT 0", "等級 0 無、1 查詢、2 維護")], ["PRIMARY KEY (uid, func)"]),
+    ("sys_audit_log", "操作紀錄", [
+        ("id", "BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY", "流水號"),
+        ("at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", "時間"),
+        ("uid", "VARCHAR(30) NOT NULL DEFAULT ''", "使用者"),
+        ("action", "VARCHAR(30) NOT NULL", "動作"),
+        ("target", "VARCHAR(80) NOT NULL DEFAULT ''", "對象"),
+        ("detail", "TEXT", "內容（異動前 → 後）")], ["KEY ix_at (at)"]),
+    ("nb_notebook", "NotebookLM 筆記本（只存網址與說明；內容在使用者的 Google 帳號）", [
+        ("id", "INT NOT NULL AUTO_INCREMENT PRIMARY KEY", "流水號"),
+        ("uuid", "CHAR(36) NOT NULL", "筆記本 UUID（網址最後一段）"),
+        ("url", "VARCHAR(255) NOT NULL", "分享網址"),
+        ("title", "VARCHAR(160) NOT NULL", "名稱"),
+        ("description", "TEXT", "內容說明"),
+        ("tags", "VARCHAR(255) NOT NULL DEFAULT ''", "標籤（逗號分隔）"),
+        ("is_default", "TINYINT NOT NULL DEFAULT 0", "預設筆記本"),
+        ("owner", "VARCHAR(30) NOT NULL DEFAULT ''", "加入的人"),
+        ("use_count", "INT NOT NULL DEFAULT 0", "使用次數"),
+        ("last_used", "DATETIME NULL", "最近使用"),
+        ("created_at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", "建立時間")], ["UNIQUE KEY ux_uuid (uuid)"]),
+    ("nb_project", "專案範本（封面格式、指令上下文、對象；換一份就能做其他專案的簡報）", [
+        ("id", "INT NOT NULL AUTO_INCREMENT PRIMARY KEY", "專案編號"),
+        ("name", "VARCHAR(120) NOT NULL", "專案名稱"),
+        ("org", "VARCHAR(120) NOT NULL DEFAULT ''", "機構名稱"),
+        ("unit", "VARCHAR(60) NOT NULL DEFAULT ''", "單位簡稱"),
+        ("unit_full", "VARCHAR(120) NOT NULL DEFAULT ''", "單位全名"),
+        ("cover_title_tpl", "VARCHAR(255) NOT NULL DEFAULT '{org} {unit} {topic}'", "封面標題範本（{org}{unit}{topic}）"),
+        ("cover_subtitle", "VARCHAR(255) NOT NULL DEFAULT ''", "封面次標題"),
+        ("byline_tpl", "VARCHAR(255) NOT NULL DEFAULT ''", "封面小標題範本（{presenter_role}{presenter}{instructor_role}{instructor}）"),
+        ("presenter_role", "VARCHAR(60) NOT NULL DEFAULT '講師'", "簡報人職稱"),
+        ("instructor_role", "VARCHAR(60) NOT NULL DEFAULT '指導老師'", "指導員職稱"),
+        ("role_text", "VARCHAR(255) NOT NULL DEFAULT ''", "指令：角色／身分"),
+        ("background_text", "TEXT", "指令：任務背景（可用 {unit}{unit_full}{audience}）"),
+        ("purpose_text", "TEXT", "指令：任務目的"),
+        ("audience_text", "VARCHAR(255) NOT NULL DEFAULT ''", "預設對象"),
+        ("term_langs", "VARCHAR(255) NOT NULL DEFAULT '[]'", "關鍵詞母語欄（JSON：[[國籍, 語言]]，順序同主題庫 terms）"),
+        ("font_title", "TINYINT NOT NULL DEFAULT 45", "封面標題字級 pt"),
+        ("font_sub", "TINYINT NOT NULL DEFAULT 40", "封面次標題字級 pt"),
+        ("font_small", "TINYINT NOT NULL DEFAULT 32", "封面小標題字級 pt"),
+        ("min_slides", "TINYINT NOT NULL DEFAULT 10", "最少張數"),
+        ("qa_count", "TINYINT NOT NULL DEFAULT 5", "Q&A 題數"),
+        ("style", "VARCHAR(20) NOT NULL DEFAULT 'pastel'", "預設視覺風格"),
+        ("extra_rules", "TEXT", "其他規則（會加進每次指令）"),
+        ("spec_md", "MEDIUMTEXT", "範本說明（CLAUDE.md 等規格文件）"),
+        ("notebook_id", "INT NULL", "預設筆記本"),
+        ("is_sample", "TINYINT NOT NULL DEFAULT 0", "內定範例"),
+        ("active", "TINYINT NOT NULL DEFAULT 1", "啟用"),
+        ("created_by", "VARCHAR(30) NOT NULL DEFAULT ''", "建立人"),
+        ("created_at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", "建立時間"),
+        ("updated_at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", "更新時間")], []),
+    ("nb_topic", "主題庫（每個主題一份教案骨架：目的、用物、步驟、注意事項、Q&A、關鍵詞）", [
+        ("id", "INT NOT NULL AUTO_INCREMENT PRIMARY KEY", "主題編號"),
+        ("project_id", "INT NOT NULL", "專案"),
+        ("code", "VARCHAR(30) NOT NULL DEFAULT ''", "代號"),
+        ("month", "TINYINT NULL", "建議月份"),
+        ("name", "VARCHAR(120) NOT NULL", "主題名稱"),
+        ("source_hint", "VARCHAR(255) NOT NULL DEFAULT ''", "依據文件名稱"),
+        ("data", "MEDIUMTEXT", "教案骨架（JSON）"),
+        ("sort", "INT NOT NULL DEFAULT 0", "排序"),
+        ("active", "TINYINT NOT NULL DEFAULT 1", "啟用")], ["KEY ix_proj (project_id)"]),
+    ("nb_person", "人員名單（簡報人、指導員）", [
+        ("id", "INT NOT NULL AUTO_INCREMENT PRIMARY KEY", "流水號"),
+        ("project_id", "INT NOT NULL DEFAULT 0", "專案（0＝共用）"),
+        ("kind", "VARCHAR(10) NOT NULL DEFAULT 'PRESENTER'", "PRESENTER 簡報人、INSTRUCTOR 指導員"),
+        ("emp_no", "VARCHAR(20) NOT NULL DEFAULT ''", "員工編號"),
+        ("name", "VARCHAR(40) NOT NULL", "姓名"),
+        ("title", "VARCHAR(40) NOT NULL DEFAULT ''", "職稱"),
+        ("note", "VARCHAR(120) NOT NULL DEFAULT ''", "備註"),
+        ("active", "TINYINT NOT NULL DEFAULT 1", "啟用")], ["KEY ix_proj (project_id, kind)"]),
+    ("nb_plan", "年度主題表（每月要上的主題與講師）", [
+        ("project_id", "INT NOT NULL", "專案"),
+        ("roc_year", "SMALLINT NOT NULL", "民國年"),
+        ("month", "TINYINT NOT NULL", "月份"),
+        ("topic_id", "INT NULL", "主題"),
+        ("custom_topic", "VARCHAR(120) NOT NULL DEFAULT ''", "自訂主題名稱"),
+        ("presenter_id", "INT NULL", "簡報人"),
+        ("instructor_id", "INT NULL", "指導員"),
+        ("class_date", "DATE NULL", "上課日期"),
+        ("job_id", "INT NULL", "已產生的簡報")], ["PRIMARY KEY (project_id, roc_year, month)"]),
+    ("nb_job", "成品（每次產生的簡報、心智圖、報告、測驗、資訊圖表）", [
+        ("id", "INT NOT NULL AUTO_INCREMENT PRIMARY KEY", "成品編號"),
+        ("kind", "VARCHAR(12) NOT NULL", "SLIDES 簡報、MINDMAP 心智圖、REPORT 報告、QUIZ 測驗、INFOGRAPHIC 資訊圖表"),
+        ("title", "VARCHAR(200) NOT NULL", "名稱"),
+        ("project_id", "INT NULL", "專案"),
+        ("topic_id", "INT NULL", "主題"),
+        ("topic_name", "VARCHAR(120) NOT NULL DEFAULT ''", "主題名稱"),
+        ("notebook_id", "INT NULL", "依據的筆記本"),
+        ("engine", "VARCHAR(12) NOT NULL DEFAULT 'TEMPLATE'", "NOTEBOOKLM 依筆記本來源、TEMPLATE 內建範本"),
+        ("style", "VARCHAR(20) NOT NULL DEFAULT 'pastel'", "視覺風格"),
+        ("brief", "TEXT", "需求單（JSON）"),
+        ("prompt", "MEDIUMTEXT", "送給 NotebookLM 的指令"),
+        ("answer", "MEDIUMTEXT", "NotebookLM 原始回答"),
+        ("sources", "MEDIUMTEXT", "引用來源（JSON）"),
+        ("content", "MEDIUMTEXT", "內容（JSON，可修改）"),
+        ("summary", "VARCHAR(120) NOT NULL DEFAULT ''", "摘要"),
+        ("seconds", "INT NOT NULL DEFAULT 0", "產生耗時（秒）"),
+        ("owner", "VARCHAR(30) NOT NULL DEFAULT ''", "建立人"),
+        ("created_at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", "建立時間"),
+        ("updated_at", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", "更新時間")],
+        ["KEY ix_owner (owner, updated_at)", "KEY ix_kind (kind)"]),
+]
+
+
+def ddl():
+    out = []
+    for name, title, cols, extra in TABLES:
+        body = ["  `%s` %s COMMENT '%s'" % (c, t, d.replace("'", "''")) for c, t, d in cols]
+        body += ["  " + x for x in extra]
+        out.append("CREATE TABLE IF NOT EXISTS `%s` (\n%s\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 "
+                   "COLLATE=utf8mb4_unicode_ci COMMENT='%s'" % (name, ",\n".join(body), title))
+    return out
+
+
+def columns(table):
+    return [c[0] for t in TABLES if t[0] == table for c in t[2]]
